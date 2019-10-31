@@ -1,0 +1,41 @@
+====
+yapq
+====
+
+
+.. image:: https://img.shields.io/pypi/v/yapq.svg
+        :target: https://pypi.python.org/pypi/yapq
+
+.. image:: https://img.shields.io/travis/ginkooo/yapq.svg
+        :target: https://travis-ci.org/ginkooo/yapq
+
+.. image:: https://readthedocs.org/projects/yapq/badge/?version=latest
+        :target: https://yapq.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+
+.. image:: https://pyup.io/repos/github/ginkooo/yapq/shield.svg
+     :target: https://pyup.io/repos/github/ginkooo/yapq/
+     :alt: Updates
+
+
+
+Yet Another Python Queue
+
+
+* Free software: MIT license
+* Documentation: https://yapq.readthedocs.io.
+
+
+Features
+--------
+
+* TODO
+
+Credits
+-------
+
+This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
