@@ -25,7 +25,13 @@ Yet Another Python Queue
 
 * Free software: MIT license
 * Documentation: https://yapq.readthedocs.io.
+Usage
+--------
 
+>>> from yapq import yapq
+>>> result = yapq.enqueue(lambda a, b: a + b, 5, 3)
+>>> print(result.get())
+8
 
 Features
 --------
