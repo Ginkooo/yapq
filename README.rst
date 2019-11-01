@@ -30,7 +30,7 @@ Yet Another Python Queue
 Features
 --------
 
-* TODO
+* Executing task in thread-based workers
 
 Credits
 -------

@@ -1,3 +1,4 @@
-# -*- coding: utf-8 -*-
+import time
+from yapq import pool
 
-"""Main module."""
+yapq = pool.Pool()
