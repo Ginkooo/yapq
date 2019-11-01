@@ -39,7 +39,7 @@ Usage
 Installing
 -------
 
-`pip install yapq`
+``pip install yapq``
 
 Features
 --------
