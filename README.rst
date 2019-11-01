@@ -25,6 +25,7 @@ Yet Another Python Queue
 
 * Free software: MIT license
 * Documentation: https://yapq.readthedocs.io.
+
 Usage
 --------
 
@@ -38,7 +39,7 @@ Usage
 Installing
 -------
 
-``pip install yapq``
+`pip install yapq`
 
 Features
 --------
