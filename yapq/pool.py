@@ -11,6 +11,8 @@ class Pool:
     def start(self):
         self.workers = [worker.Worker(self.task_queue) for _ in range(self.size)]
 
+    def stop(self):
+        self.task_queue.put(None)
 
     def enqueue(self, func, *args, **kwargs):
         job_ = job.Job(func, *args, **kwargs)
