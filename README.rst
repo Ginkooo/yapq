@@ -28,10 +28,17 @@ Yet Another Python Queue
 Usage
 --------
 
+
 >>> from yapq import yapq
 >>> result = yapq.enqueue(lambda a, b: a + b, 5, 3)
 >>> print(result.get())
 8
+
+
+Installing
+-------
+
+``pip install yapq``
 
 Features
 --------
