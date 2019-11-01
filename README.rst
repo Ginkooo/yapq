@@ -14,8 +14,8 @@ yapq
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/ginkooo/yapq/shield.svg
-     :target: https://pyup.io/repos/github/ginkooo/yapq/
+.. image:: https://pyup.io/repos/github/Ginkooo/yapq/shield.svg
+     :target: https://pyup.io/repos/github/Ginkooo/yapq/
      :alt: Updates
 
 
