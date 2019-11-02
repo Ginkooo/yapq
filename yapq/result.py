@@ -1,8 +1,12 @@
 class Result:
+
+    def __init__(self, uuid=None, task_registry=None):
+        self.uuid = uuid
+        self.task_registry = task_registry
+
     value = None
-    ready = False
 
     def get(self):
-        while not self.ready:
+        while not isinstance(self.task_registry.get(self.uuid), self.__class__):
             pass
-        return self.value
+        return self.task_registry.get(self.uuid).value

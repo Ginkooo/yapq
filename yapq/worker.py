@@ -1,17 +1,28 @@
-import threading
+import multiprocessing
+import time
+
+from yapq import result
 
 
 class Worker:
 
-    def __init__(self, task_queue):
-        self.task_queue = task_queue
-        self.thread = threading.Thread(target=self.execution_loop)
+    def __init__(self, task_registry):
+        self.task_registry = task_registry
+        self.thread = multiprocessing.Process(target=self.execution_loop)
         self.thread.start()
 
     def execution_loop(self):
         while True:
-            job = self.task_queue.get()
-            if job is None:
-                self.task_queue.put(None)
+            time.sleep(1)
+            if self.task_registry.commands.get('terminate'):
                 break
-            job()
+            job = self.task_registry.get()
+            if not job:
+                continue
+            if isinstance(job, result.Result):
+                continue
+            value = job()
+            self.task_registry.put_result(value, job.uuid)
+
+    def join(self):
+        self.thread.join()
