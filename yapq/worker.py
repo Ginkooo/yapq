@@ -2,27 +2,36 @@ import multiprocessing
 import time
 
 from yapq import result
+from yapq import task_registry
 
 
 class Worker:
 
-    def __init__(self, task_registry):
-        self.task_registry = task_registry
-        self.thread = multiprocessing.Process(target=self.execution_loop)
+    def __init__(self, task_registry_dict, commands_dict, lock):
+        self.thread = multiprocessing.Process(
+            target=Worker.execution_loop,
+            args=(task_registry_dict, commands_dict, lock)
+        )
         self.thread.start()
 
-    def execution_loop(self):
+    @staticmethod
+    def execution_loop(task_registry_dict, commands_dict, lock):
+        task_registry_ = task_registry.TaskRegistry(
+            task_registry_dict,
+            commands_dict,
+            lock,
+        )
+
         while True:
-            time.sleep(1)
-            if self.task_registry.commands.get('terminate'):
+            if task_registry_.commands.get('terminate'):
                 break
-            job = self.task_registry.get()
+            job = task_registry_.get()
             if not job:
                 continue
             if isinstance(job, result.Result):
                 continue
             value = job()
-            self.task_registry.put_result(value, job.uuid)
+            task_registry_.put_result(value, job.uuid)
 
     def join(self):
         self.thread.join()

@@ -9,16 +9,29 @@ from yapq import task_registry
 class Pool:
 
     def __init__(self):
-        self.task_registry = task_registry.TaskRegistry()
+        self.manager = multiprocessing.Manager()
+        self.task_registry_dict = self.manager.dict()
+        self.lock = self.manager.Lock()
+        self.commands_dict = self.manager.dict()
+        self.task_registry = task_registry.TaskRegistry(
+            self.task_registry_dict,
+            self.commands_dict,
+            self.lock,
+        )
 
     def start(self, size=multiprocessing.cpu_count()):
-        self.workers = [worker.Worker(self.task_registry) for _ in range(size)]
+        self.workers = [worker.Worker(
+            self.task_registry_dict,
+            self.commands_dict,
+            self.lock,
+            ) for _ in range(size)]
 
     def stop(self):
         self.task_registry.send_terminate_task()
         for w in self.workers:
             w.join()
-        self.task_registry.stop()
+        self.manager.shutdown()
+        self.manager.join()
 
     def enqueue(self, func, *args, **kwargs):
         job_ = job.Job(func, *args, **kwargs)

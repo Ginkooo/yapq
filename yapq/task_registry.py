@@ -8,25 +8,27 @@ from yapq import serializer
 
 class TaskRegistry:
 
-    def __init__(self):
-        self.manager = multiprocessing.Manager()
-        self.task_registry = self.manager.dict()
-        self.commands = self.manager.dict()
+    def __init__(self, task_registry_dict, commands_dict, lock):
+        self.task_registry = task_registry_dict
+        self.commands = commands_dict
+        self.lock = lock
 
     def put(self, job):
         self.task_registry[str(uuid.uuid4())] = serializer.encode(job)
 
     def get(self, key=None):
-        if key is None:
-            key = random.choice(self.task_registry.keys())
+        with self.lock:
+            if key is None:
+                key = random.choice(self.task_registry.keys())
 
-        if not self.task_registry.keys():
-            return None
+            if not self.task_registry.keys():
+                return None
 
-        if not self.task_registry.get(key):
-            return None
+            if not self.task_registry.get(key):
+                return None
 
-        return serializer.decode(self.task_registry[key])
+            ret = serializer.decode(self.task_registry[key])
+            return ret
 
     def send_terminate_task(self):
         self.commands['terminate'] = serializer.encode(True)
@@ -36,7 +38,3 @@ class TaskRegistry:
         result_ = result.Result()
         result_.value = value
         self.task_registry[uuid] = serializer.encode(result_)
-
-    def stop(self):
-        self.manager.shutdown()
-        self.manager.join()
