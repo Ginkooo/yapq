@@ -30,7 +30,8 @@ Yet Another Python Queue
 Usage
 -----
 
->>> from yapq import yapq
+>>> from yapq import Yapq
+>>> yapq = Yapq()
 >>> yapq.start()
 >>> result = yapq.enqueue(lambda a, b: a + b, 5, 3)
 >>> result.get()

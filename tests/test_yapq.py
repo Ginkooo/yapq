@@ -6,15 +6,15 @@
 import pytest
 
 
-from yapq import yapq
+from yapq import Yapq
 
 def fn(a, b):
     return a + b
 
 
 def test_yapq(monkeypatch):
+    yapq = Yapq()
     yapq.start()
-    print('started')
     result = yapq.enqueue(fn, 5, 3)
     assert result.get() == 8
     yapq.stop()
