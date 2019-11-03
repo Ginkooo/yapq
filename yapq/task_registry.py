@@ -18,6 +18,9 @@ class TaskRegistry:
 
     def get(self, key=None):
         with self.lock:
+            if not self.task_registry.keys():
+                return None
+
             if key is None:
                 key = random.choice(self.task_registry.keys())
 
