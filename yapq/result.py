@@ -1,12 +1,17 @@
+import pickle
+
+
 class Result:
 
-    def __init__(self, uuid=None, task_registry=None):
+    def __init__(self, uuid=None, result_dict=None):
         self.uuid = uuid
-        self.task_registry = task_registry
+        self.result_dict = result_dict
 
     value = None
 
     def get(self):
-        while not isinstance(self.task_registry.get(self.uuid), self.__class__):
+        while self.uuid not in self.result_dict:
             pass
-        return self.task_registry.get(self.uuid).value
+        value = pickle.loads(self.result_dict[self.uuid]).value
+        del self.result_dict[self.uuid]
+        return value

@@ -8,30 +8,21 @@ from yapq import serializer
 
 class TaskRegistry:
 
-    def __init__(self, task_registry_dict, commands_dict, lock):
-        self.task_registry = task_registry_dict
+    def __init__(self, task_list, commands_dict, result_dict, lock):
+        self.task_list = task_list
         self.commands = commands_dict
+        self.result_dict = result_dict
         self.lock = lock
 
     def put(self, job):
-        self.task_registry[str(uuid.uuid4())] = serializer.encode(job)
+        self.task_list.append(serializer.encode(job))
 
     def get(self, key=None):
         with self.lock:
-            if not self.task_registry.keys():
+            try:
+                return serializer.decode(self.task_list.pop())
+            except IndexError:
                 return None
-
-            if key is None:
-                key = random.choice(self.task_registry.keys())
-
-            if not self.task_registry.keys():
-                return None
-
-            if not self.task_registry.get(key):
-                return None
-
-            ret = serializer.decode(self.task_registry[key])
-            return ret
 
     def send_terminate_task(self):
         self.commands['terminate'] = serializer.encode(True)
@@ -40,4 +31,4 @@ class TaskRegistry:
     def put_result(self, value, uuid):
         result_ = result.Result()
         result_.value = value
-        self.task_registry[uuid] = serializer.encode(result_)
+        self.result_dict[uuid] = serializer.encode(result_)

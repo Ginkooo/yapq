@@ -7,18 +7,19 @@ from yapq import task_registry
 
 class Worker:
 
-    def __init__(self, task_registry_dict, commands_dict, lock):
+    def __init__(self, task_registry_dict, commands_dict, result_dict, lock):
         self.thread = multiprocessing.Process(
             target=Worker.execution_loop,
-            args=(task_registry_dict, commands_dict, lock)
+            args=(task_registry_dict, commands_dict, result_dict, lock)
         )
         self.thread.start()
 
     @staticmethod
-    def execution_loop(task_registry_dict, commands_dict, lock):
+    def execution_loop(task_registry_dict, commands_dict, result_dict, lock):
         task_registry_ = task_registry.TaskRegistry(
             task_registry_dict,
             commands_dict,
+            result_dict,
             lock,
         )
 

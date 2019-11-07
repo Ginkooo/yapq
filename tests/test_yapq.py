@@ -5,7 +5,6 @@
 
 import pytest
 
-
 from yapq import Yapq
 
 def fn(a, b):
@@ -15,6 +14,9 @@ def fn(a, b):
 def test_yapq(monkeypatch):
     yapq = Yapq()
     yapq.start()
-    result = yapq.enqueue(fn, 5, 3)
-    assert result.get() == 8
+    res1 = yapq.enqueue(fn, 5, 3)
+    res2 = yapq.enqueue(fn, 2, 3)
+    assert res2.get() == 5
+    assert res1.get() == 8
+
     yapq.stop()

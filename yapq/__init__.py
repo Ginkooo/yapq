@@ -10,19 +10,22 @@ class Yapq:
 
     def __init__(self):
         self.manager = multiprocessing.Manager()
-        self.task_registry_dict = self.manager.dict()
+        self.task_list = self.manager.list()
         self.lock = self.manager.Lock()
         self.commands_dict = self.manager.dict()
+        self.result_dict = self.manager.dict()
         self.task_registry = task_registry.TaskRegistry(
-            self.task_registry_dict,
+            self.task_list,
             self.commands_dict,
+            self.result_dict,
             self.lock,
         )
 
     def start(self, size=multiprocessing.cpu_count()):
         self.workers = [worker.Worker(
-            self.task_registry_dict,
+            self.task_list,
             self.commands_dict,
+            self.result_dict,
             self.lock,
             ) for _ in range(size)]
 
@@ -36,4 +39,4 @@ class Yapq:
     def enqueue(self, func, *args, **kwargs):
         job_ = job.Job(func, *args, **kwargs)
         self.task_registry.put(job_)
-        return result.Result(job_.uuid, self.task_registry)
+        return result.Result(job_.uuid, self.result_dict)
