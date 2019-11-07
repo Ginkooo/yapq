@@ -12,3 +12,12 @@ class Job:
 
     def __call__(self):
         return self.func(*self.args, **self.kwargs)
+
+
+    def as_dict(self):
+        return {
+            'uuid': self.uuid,
+            'function': repr(self.func),
+            'args': repr(self.args),
+            'kwargs': repr(self.kwargs),
+        }

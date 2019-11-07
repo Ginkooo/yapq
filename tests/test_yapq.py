@@ -13,9 +13,11 @@ def fn(a, b):
 
 def test_yapq(monkeypatch):
     yapq = Yapq()
-    yapq.start()
     res1 = yapq.enqueue(fn, 5, 3)
     res2 = yapq.enqueue(fn, 2, 3)
+
+    yapq.start()
+
     assert res2.get() == 5
     assert res1.get() == 8
 

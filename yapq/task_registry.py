@@ -13,9 +13,36 @@ class TaskRegistry:
         self.commands = commands_dict
         self.result_dict = result_dict
         self.lock = lock
+        self.internals = task_list, commands_dict, result_dict, lock
 
     def put(self, job):
         self.task_list.append(serializer.encode(job))
+
+    def get_tasks_info(self):
+        return [pickle.loads(job).as_dict() for job in self.task_list]
+
+    def find_task_index(self, uuid):
+        for i, job in enumerate(self.task_list):
+            job = pickle.loads(job)
+            if job.uuid == uuid:
+                return i
+        return None
+
+    def swap_tasks(self, left_uuid, right_uuid):
+        with self.lock:
+            left_idx = self.find_task_index(left_uuid)
+            right_idx = self.find_task_index(right_uuid)
+
+            print(self.get_tasks_info())
+            (
+                self.task_list[left_idx],
+                self.task_list[right_idx],
+            ) = (
+                self.task_list[right_idx],
+                self.task_list[left_idx],
+            )
+            print()
+            print(self.get_tasks_info())
 
     def get(self, key=None):
         with self.lock:

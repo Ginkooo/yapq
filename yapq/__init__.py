@@ -23,10 +23,7 @@ class Yapq:
 
     def start(self, size=multiprocessing.cpu_count()):
         self.workers = [worker.Worker(
-            self.task_list,
-            self.commands_dict,
-            self.result_dict,
-            self.lock,
+            self.task_registry,
             ) for _ in range(size)]
 
     def stop(self):
@@ -35,6 +32,12 @@ class Yapq:
             w.join()
         self.manager.shutdown()
         self.manager.join()
+
+    def get_tasks_info(self):
+        return self.task_registry.get_tasks_info()
+
+    def swap(self, left_uuid, right_uuid):
+        return self.task_registry.swap_tasks(left_uuid, right_uuid)
 
     def enqueue(self, func, *args, **kwargs):
         job_ = job.Job(func, *args, **kwargs)
