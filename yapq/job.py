@@ -1,3 +1,4 @@
+import pickle
 import uuid
 
 from yapq import result
@@ -21,3 +22,10 @@ class Job:
             'args': repr(self.args),
             'kwargs': repr(self.kwargs),
         }
+
+    def as_pickle(self):
+        return pickle.dumps(self)
+
+    @staticmethod
+    def from_pickle(bytes_):
+        return pickle.loads(bytes_)
